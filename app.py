@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,send_file
-import pymysql
-import pandas as pd
-from io import BytesIO 
+from flask import Flask, render_template, request, redirect, url_for, flash 
+import pymysql 
 
 app = Flask(__name__)
 app.secret_key = 'kalai_thiruvizha_25_secret_key'
@@ -293,129 +291,8 @@ def check_limit(register_no):
     finally:
         if connection:
             connection.close()
-@app.route('/export-excel')
-def export_excel():
-    connection = None
-    try:
-        connection = get_db_connection()
-        if not connection:
-            flash('Database connection failed.', 'error')
-            return redirect(url_for('index'))
-        
-        # Query to get all data with team information
-        query = '''
-            SELECT 
-                p.id as team_id,
-                p.register_no,
-                p.name,
-                p.year,
-                p.department,
-                p.gender,
-                p.participation_type,
-                p.group_size,
-                p.competition,
-                p.registration_date,
-                'Main Participant' as role,
-                NULL as team_leader_name,
-                NULL as team_leader_register_no
-            FROM participants p
-            
-            UNION ALL
-            
-            SELECT 
-                p.id as team_id,
-                gm.register_no,
-                gm.name,
-                gm.year,
-                gm.department,
-                gm.gender,
-                p.participation_type,
-                p.group_size,
-                p.competition,
-                p.registration_date,
-                'Group Member' as role,
-                p.name as team_leader_name,
-                p.register_no as team_leader_register_no
-            FROM group_members gm
-            JOIN participants p ON gm.participant_id = p.id
-            
-            ORDER BY team_id, role DESC
-        '''
-        
-        df = pd.read_sql_query(query, connection)
-        
-        # Create Excel file in memory
-        output = BytesIO()
-        
-        # Create Excel writer
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            # Main detailed sheet
-            df.to_excel(writer, sheet_name='All Registrations', index=False)
-            
-            # Summary sheet
-            summary_data = []
-            
-            # Competition-wise summary
-            comp_summary = df.groupby('competition').agg({
-                'register_no': 'count',
-                'participation_type': lambda x: (x == 'solo').sum()
-            }).reset_index()
-            comp_summary.columns = ['Competition', 'Total Participants', 'Solo Participants']
-            comp_summary['Group Participants'] = comp_summary['Total Participants'] - comp_summary['Solo Participants']
-            
-            # Department-wise summary
-            dept_summary = df.groupby('department').size().reset_index(name='Count')
-            
-            # Year-wise summary
-            year_summary = df.groupby('year').size().reset_index(name='Count')
-            
-            # Participation type summary
-            type_summary = df.groupby('participation_type').size().reset_index(name='Count')
-            
-            # Write summary sheets
-            comp_summary.to_excel(writer, sheet_name='Competition Summary', index=False)
-            dept_summary.to_excel(writer, sheet_name='Department Summary', index=False)
-            year_summary.to_excel(writer, sheet_name='Year Summary', index=False)
-            type_summary.to_excel(writer, sheet_name='Participation Type', index=False)
-            
-            # Team-wise details
-            team_query = '''
-                SELECT 
-                    p.id as team_id,
-                    p.register_no as leader_register_no,
-                    p.name as leader_name,
-                    p.participation_type,
-                    p.group_size,
-                    p.competition,
-                    p.registration_date,
-                    COUNT(gm.id) as members_registered
-                FROM participants p
-                LEFT JOIN group_members gm ON p.id = gm.participant_id
-                GROUP BY p.id
-                ORDER BY p.registration_date DESC
-            '''
-            team_df = pd.read_sql_query(team_query, connection)
-            team_df.to_excel(writer, sheet_name='Team Overview', index=False)
-        
-        output.seek(0)
-        
-        # Send file
-        filename = f"Kalai_Thiruvizha_Registrations_{pd.Timestamp.now().strftime('%Y%m%d_%H%M')}.xlsx"
-        return send_file(
-            output,
-            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            as_attachment=True,
-            download_name=filename
-        )
-        
-    except Exception as e:
-        print(f"Error exporting Excel: {e}")
-        flash(f'Error generating Excel file: {str(e)}', 'error')
-        return redirect(url_for('view_registrations'))
-    finally:
-        if connection:
-            connection.close()
-
+ 
 
 if __name__ == '__main__':
+
     app.run(debug=True)
