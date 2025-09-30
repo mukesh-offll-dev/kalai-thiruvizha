@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Teams - Kalai Thiruvizha 25</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .team-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+        
+        .team-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .team-info {
+            flex: 1;
+        }
+        
+        .team-type {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .team-title {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        
+        .competition-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .member-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .leader-card {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+        }
+        
+        .member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .member-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .member-register {
+            color: #666;
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .member-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .detail-value {
+            color: #333;
+        }
+        
+        .solo-team {
+            border-left-color: #28a745;
+        }
+        
+        .group-team {
+            border-left-color: #ffc107;
+        }
+        
+        .no-teams {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-teams h3 {
+            margin-bottom: 10px;
+        }
+        
+        .team-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .navigation-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Team Registrations - Kalai Thiruvizha 25</h1>
+        
+        <div class="navigation-buttons">
+            <a href="{{ url_for('index') }}" class="btn-submit">➕ New Registration</a>
+            <a href="{{ url_for('view_registrations') }}" class="btn-secondary">📋 View All Registrations</a>
+        </div>
+
+        {% if teams %}
+            <div class="teams-container">
+                {% for team_id, team in teams.items() %}
+                <div class="team-card {% if team.participation_type == 'solo' %}solo-team{% else %}group-team{% endif %}">
+                    <div class="team-header">
+                        <div class="team-info">
+                            <h2 class="team-title">{{ team.leader.name }}</h2>
+                            <div class="competition-badge">{{ team.competition }}</div>
+                            <div class="team-type">
+                                {{ team.participation_type|upper }} 
+                                {% if team.participation_type == 'group' %}
+                                    ({{ team.group_size }} members)
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-meta">
+                        <div class="meta-item">
+                            <span class="detail-label">Registered on:</span>
+                            <span class="detail-value">{{ team.registration_date }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="detail-label">Team ID:</span>
+                            <span class="detail-value">#{{ team_id }}</span>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 25px 0 15px 0; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                        {% if team.participation_type == 'solo' %}
+                            Participant Details
+                        {% else %}
+                            Team Members
+                        {% endif %}
+                    </h3>
+                    
+                    <div class="members-grid">
+                        <!-- Team Leader -->
+                        <div class="member-card leader-card">
+                            <div class="member-header">
+                                <span class="member-name">👑 {{ team.leader.name }}</span>
+                                <span class="member-register">{{ team.leader.register_no }}</span>
+                            </div>
+                            <div class="member-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Year:</span>
+                                    <span class="detail-value">{{ team.leader.year }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Department:</span>
+                                    <span class="detail-value">{{ team.leader.department }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Gender:</span>
+                                    <span class="detail-value">{{ team.leader.gender }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Role:</span>
+                                    <span class="detail-value" style="color: #007bff; font-weight: bold;">Team Leader</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group Members -->
+                        {% if team.participation_type == 'group' %}
+                            {% for member in team.members %}
+                            <div class="member-card">
+                                <div class="member-header">
+                                    <span class="member-name">👤 {{ member.name }}</span>
+                                    <span class="member-register">{{ member.register_no }}</span>
+                                </div>
+                                <div class="member-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Year:</span>
+                                        <span class="detail-value">{{ member.year }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Department:</span>
+                                        <span class="detail-value">{{ member.department }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Gender:</span>
+                                        <span class="detail-value">{{ member.gender }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Role:</span>
+                                        <span class="detail-value">Team Member</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Team Summary -->
+                    <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; text-align: center;">
+                        <strong>Team Summary:</strong> 
+                        {{ team.group_size }} total participant{% if team.group_size > 1 %}s{% endif %} 
+                        registered for <strong>{{ team.competition }}</strong>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-teams">
+                <h3>No teams registered yet</h3>
+                <p>Be the first to register for Kalai Thiruvizha 25!</p>
+                <a href="{{ url_for('index') }}" class="btn-submit">Register Now</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

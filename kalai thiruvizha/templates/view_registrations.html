@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Registrations - Kalai Thiruvizha 25</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Kalai Thiruvizha - 25 Registrations</h1>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="{{ url_for('index') }}" class="btn-submit">➕ New Registration</a>
+        </div>
+
+        <div class="registrations-list">
+            {% for participant in participants %}
+            <div class="registration-card">
+                <h3>{{ participant.name }} ({{ participant.register_no }})</h3>
+                <div class="details">
+                    <p><strong>Year:</strong> {{ participant.year }}</p>
+                    <p><strong>Department:</strong> {{ participant.department }}</p>
+                    <p><strong>Gender:</strong> {{ participant.gender }}</p>
+                    <p><strong>Type:</strong> {{ participant.participation_type|title }}</p>
+                    <p><strong>Competition:</strong> {{ participant.competition }}</p>
+                    {% if participant.participation_type == 'group' %}
+                        <p><strong>Group Size:</strong> {{ participant.group_size }}</p>
+                        <p><strong>Members Registered:</strong> {{ participant.member_count }}</p>
+                    {% endif %}
+                    <p><strong>Registered on:</strong> {{ participant.registration_date }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if not participants %}
+            <div class="no-data">
+                <p>No registrations found.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div style="text-align: center; margin-bottom: 20px;">
+    <a href="{{ url_for('index') }}" class="btn-submit">➕ New Registration</a>
+    <a href="{{ url_for('view_teams') }}" class="btn-submit">👥 View Teams</a>
+</div>
+</body>
+</html>
