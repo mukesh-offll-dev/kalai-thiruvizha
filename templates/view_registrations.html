@@ -19,6 +19,9 @@
             <div class="registration-card">
                 <h3>{{ participant.name }} ({{ participant.register_no }})</h3>
                 <div class="details">
+                    <p><strong>Register No:</strong> {{ participant.register_no }}</p>
+                    <p><strong>Name:</strong> {{ participant.name }}</p>
+                    <p><strong>Phone:</strong> {{ participant.phone_number }}</p>  <!-- Added -->
                     <p><strong>Year:</strong> {{ participant.year }}</p>
                     <p><strong>Department:</strong> {{ participant.department }}</p>
                     <p><strong>Gender:</strong> {{ participant.gender }}</p>
@@ -30,6 +33,7 @@
                     {% endif %}
                     <p><strong>Registered on:</strong> {{ participant.registration_date }}</p>
                 </div>
+
             </div>
             {% endfor %}
             
