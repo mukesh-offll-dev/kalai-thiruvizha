@@ -8,9 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>KALLOORI KALAI THIRUVIZHA 2025 - 2026</h1>
+        <h1>GOVERNMENT COLLEGE OF ENGINEERING SRIRANGAM <br><span style="color: red;">KALLOORI KALAI THIRUVIZHA 2025 - 2026</span></h1>
         <h1> Registration Form</h1>
-        
+        <div class="description" role="status" aria-live="polite">
+            <div class="marquee">
+                Note: In this event, one student may participate in a maximum of 3 events. 
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                For queries contact Chief Coordinator Dr. L. Rasikannan, Associate Professor — Contact: 97904 24212.
+            </div>
+        </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -41,12 +47,12 @@
                 <h3>Main Participant Details</h3>
                 <div class="form-group">
                     <label for="register_no">Register No:</label>
-                    <input type="text" id="register_no" name="register_no" required>
+                    <input type="text" id="register_no" name="register_no" required placeholder="Enter your Register number">
                 </div>
 
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name"placeholder="Enter your Namer"  required>
                 </div>
 
                 <div class="form-group">
@@ -82,6 +88,13 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label for="phone_number">Phone Number:</label>
+                    <input type="tel" id="phone_number" name="phone_number" pattern="[0-9]{10}" required>
+                    <small>Enter 10-digit phone number</small>
+                </div>
+
             </div>
 
             <!-- Group Members Section -->
@@ -95,40 +108,7 @@
                 <label for="competition">Competition:</label>
                 <select id="competition" name="competition" required>
                     <option value="">Select Competition</option>
-                    <option value="Poetry Contest">Poetry Contest</option>
-                    <option value="Short Story Writing Contest">Short Story Writing Contest</option>
-                    <option value="Podcast Competition">Podcast Competition</option>
-                    <option value="Speech Competition">Speech Competition</option>
-                    <option value="Commentary Contest">Commentary Contest</option>
-                    <option value="Budget Battle">Budget Battle</option>
-                    <option value="Treasure Hunt">Treasure Hunt</option>
-                    <option value="College 2.0">College 2.0</option>
-                    <option value="Solo Singing Competition">Solo Singing Competition</option>
-                    <option value="Instruments">Instruments</option>
-                    <option value="Musical Storytelling Competition">Musical Storytelling Competition</option>
-                    <option value="Lyrics Writing with Tune">Lyrics Writing with Tune</option>
-                    <option value="Music Around You">Music Around You</option>
-                    <option value="Dance - Solo">Dance - Solo</option>
-                    <option value="Dance - Group">Dance - Group</option>
-                    <option value="Mime">Mime</option>
-                    <option value="Puppetry">Puppetry</option>
-                    <option value="Art Competition">Art Competition</option>
-                    <option value="Fashion Designing">Fashion Designing</option>
-                    <option value="3D Art">3D Art</option>
-                    <option value="Digital Poster Making">Digital Poster Making</option>
-                    <option value="Youth Parliament">Youth Parliament</option>
-                    <option value="Startup Siruthai">Startup Siruthai</option>
-                    <option value="Performative Martial Arts Competition">Performative Martial Arts Competition</option>
-                    <option value="Nature Collage">Nature Collage</option>
-                    <option value="Debate">Debate</option>
-                    <option value="Roleplay">Roleplay</option>
-                    <option value="Stand Up Comedy">Stand Up Comedy</option>
-                    <option value="Cooking Without Fire">Cooking Without Fire</option>
-                    <option value="Show and Tell">Show and Tell</option>
-                    <option value="Natural Photography Contest">Natural Photography Contest</option>
-                    <option value="Short Film Contest">Short Film Contest</option>
                 </select>
-
             </div>
 
             <button type="submit" class="btn-submit">Register</button>
@@ -260,12 +240,85 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
+
+                         <div class="form-group">
+                            <label>Phone Number:</label>
+                            <input type="tel" name="phone_number_${i}" pattern="[0-9]{10}" required>
+                        </div>
+                        
                         <hr>
                     `;
                     groupFields.appendChild(memberDiv);
                 }
             }
         }
+
+            const soloCompetitions = [
+                "Poetry Contest",
+                "Short Story Writing Contest",
+                "Podcast Competition",
+                "Speech Competition",
+                "Commentary Contest",
+                "Solo Singing Competition",
+                "Instruments",
+                "Dance - Solo",
+                "Performative Martial Arts Competition",
+                "Art Competition",
+                "3D Art",
+                "Digital Poster Making",
+                "Startup Siruthai",
+                "Stand Up Comedy",
+                "Nature Collage",
+                "Show and Tell",
+                "Natural Photography Contest"
+            ];
+
+            const groupCompetitions = [
+                "Budget Battle",
+                "Treasure Hunt",
+                "College 2.0",
+                "Musical Storytelling Competition",
+                "Lyrics Writing with Tune",
+                "Music Around You",
+                "Dance - Group",
+                "Performative Martial Arts Competition",
+                "Mime",
+                "Puppetry",
+                "Short Film Contest",
+                "Fashion Designing",
+                "3D Art",
+                "Digital Poster Making",
+                "Youth Parliament",
+                "Debate",
+                "Roleplay",
+                "Cooking Without Fire"
+            ];
+
+            function updateCompetitionList() {
+                const type = document.getElementById('participation_type').value;
+                const competitionSelect = document.getElementById('competition');
+                competitionSelect.innerHTML = '<option value="">Select Competition</option>'; // reset
+
+                let list = [];
+                if (type === "solo") {
+                    list = soloCompetitions;
+                } else if (type === "group") {
+                    list = groupCompetitions;
+                }
+
+                list.forEach(event => {
+                    const option = document.createElement("option");
+                    option.value = event;
+                    option.textContent = event;
+                    competitionSelect.appendChild(option);
+                });
+            }
+
+            // attach function when participation type changes
+            document.getElementById("participation_type").addEventListener("change", function() {
+                toggleGroupFields();
+                updateCompetitionList();
+            });
     </script>
 
 </body>
