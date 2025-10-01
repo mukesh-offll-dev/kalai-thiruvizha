@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash 
 import pymysql 
-
 app = Flask(__name__)
 app.secret_key = 'kalai_thiruvizha_25_secret_key'
 
@@ -73,6 +72,7 @@ def register():
         year = request.form['year']
         department = request.form['department']
         gender = request.form['gender']
+        phone_number = request.form['phone_number'].strip()  # New phone number field
         
         connection = get_db_connection()
         if not connection:
@@ -111,13 +111,14 @@ def register():
         else:
             group_size = 1
         
+        # Updated insert query with phone_number
         insert_participant_query = '''
             INSERT INTO participants (register_no, name, year, department, gender, 
-                                    participation_type, group_size, competition)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                    phone_number, participation_type, group_size, competition)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         '''
         participant_data = (register_no, name, year, department, gender, 
-                          participation_type, group_size, competition)
+                          phone_number, participation_type, group_size, competition)
         
         cursor.execute(insert_participant_query, participant_data)
         participant_id = cursor.lastrowid
@@ -131,14 +132,16 @@ def register():
                 member_year = request.form.get(f'year_{i}')
                 member_department = request.form.get(f'dept_{i}')
                 member_gender = request.form.get(f'gender_{i}')
+                member_phone_number = request.form.get(f'phone_number_{i}', '').strip()  # Group member phone
                 
-                if all([member_register_no, member_name, member_year, member_department, member_gender]):
+                if all([member_register_no, member_name, member_year, member_department, member_gender, member_phone_number]):
+                    # Updated insert query for group members with phone_number
                     insert_member_query = '''
-                        INSERT INTO group_members (participant_id, register_no, name, year, department, gender)
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                        INSERT INTO group_members (participant_id, register_no, name, year, department, gender, phone_number)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
                     '''
                     member_data = (participant_id, member_register_no, member_name, 
-                                 member_year, member_department, member_gender)
+                                 member_year, member_department, member_gender, member_phone_number)
                     cursor.execute(insert_member_query, member_data)
         
         connection.commit()
@@ -158,6 +161,7 @@ def register():
             connection.close()
         
     return redirect(url_for('index'))
+
 
 @app.route('/success')
 def success():
@@ -291,8 +295,8 @@ def check_limit(register_no):
     finally:
         if connection:
             connection.close()
+
  
 
 if __name__ == '__main__':
-
-    app.run(debug=True)
+    app.run(host="10.166.105.1",port=5500,debug=True)
