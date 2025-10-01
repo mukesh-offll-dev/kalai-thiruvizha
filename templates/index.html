@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalai Thiruvizha - 25 Registration</title>
+    <title>KALLOORI KALAI THIRUVIZHA - 25 Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Kalai Thiruvizha - 25 Registration</h1>
+        <h1>KALLOORI KALAI THIRUVIZHA 2025 - 2026</h1>
+        <h1> Registration Form</h1>
         
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -63,12 +64,12 @@
                     <label for="department">Department:</label>
                     <select id="department" name="department" required>
                         <option value="">Select Department</option>
-                        <option value="CSE">Computer Science Engineering</option>
+                        <option value="CSE">Computer Science and Engineering</option>
                         <option value="ECE">Electronics and Communication Engineering</option>
                         <option value="EEE">Electrical and Electronics Engineering</option>
                         <option value="MECH">Mechanical Engineering</option>
                         <option value="CIVIL">Civil Engineering</option>
-                        <option value="IT">Information Technology</option>
+                        <option value="MCT">Mechatronics</option>
                     </select>
                 </div>
 
@@ -94,14 +95,40 @@
                 <label for="competition">Competition:</label>
                 <select id="competition" name="competition" required>
                     <option value="">Select Competition</option>
-                    <option value="Singing">Singing Competition</option>
-                    <option value="Dance">Dance Competition</option>
-                    <option value="Drama">Drama Competition</option>
-                    <option value="Drawing">Drawing Competition</option>
-                    <option value="Photography">Photography Competition</option>
-                    <option value="Debate">Debate Competition</option>
-                    <option value="Quiz">Quiz Competition</option>
+                    <option value="Poetry Contest">Poetry Contest</option>
+                    <option value="Short Story Writing Contest">Short Story Writing Contest</option>
+                    <option value="Podcast Competition">Podcast Competition</option>
+                    <option value="Speech Competition">Speech Competition</option>
+                    <option value="Commentary Contest">Commentary Contest</option>
+                    <option value="Budget Battle">Budget Battle</option>
+                    <option value="Treasure Hunt">Treasure Hunt</option>
+                    <option value="College 2.0">College 2.0</option>
+                    <option value="Solo Singing Competition">Solo Singing Competition</option>
+                    <option value="Instruments">Instruments</option>
+                    <option value="Musical Storytelling Competition">Musical Storytelling Competition</option>
+                    <option value="Lyrics Writing with Tune">Lyrics Writing with Tune</option>
+                    <option value="Music Around You">Music Around You</option>
+                    <option value="Dance - Solo">Dance - Solo</option>
+                    <option value="Dance - Group">Dance - Group</option>
+                    <option value="Mime">Mime</option>
+                    <option value="Puppetry">Puppetry</option>
+                    <option value="Art Competition">Art Competition</option>
+                    <option value="Fashion Designing">Fashion Designing</option>
+                    <option value="3D Art">3D Art</option>
+                    <option value="Digital Poster Making">Digital Poster Making</option>
+                    <option value="Youth Parliament">Youth Parliament</option>
+                    <option value="Startup Siruthai">Startup Siruthai</option>
+                    <option value="Performative Martial Arts Competition">Performative Martial Arts Competition</option>
+                    <option value="Nature Collage">Nature Collage</option>
+                    <option value="Debate">Debate</option>
+                    <option value="Roleplay">Roleplay</option>
+                    <option value="Stand Up Comedy">Stand Up Comedy</option>
+                    <option value="Cooking Without Fire">Cooking Without Fire</option>
+                    <option value="Show and Tell">Show and Tell</option>
+                    <option value="Natural Photography Contest">Natural Photography Contest</option>
+                    <option value="Short Film Contest">Short Film Contest</option>
                 </select>
+
             </div>
 
             <button type="submit" class="btn-submit">Register</button>
@@ -240,5 +267,6 @@
             }
         }
     </script>
+
 </body>
 </html>
