@@ -177,7 +177,7 @@ def view_registrations():
         
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         
-        # Get all participants
+        # Get all participants with phone number
         cursor.execute('''
             SELECT p.*, COUNT(gm.id) as member_count 
             FROM participants p 
@@ -196,6 +196,7 @@ def view_registrations():
             cursor.close()
             connection.close()
 
+
 @app.route('/view-teams')
 def view_teams():
     connection = None
@@ -206,7 +207,7 @@ def view_teams():
         
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         
-        # Get all participants with their group members
+        # Get all participants with their group members including phone numbers
         cursor.execute('''
             SELECT 
                 p.id as team_id,
@@ -215,6 +216,7 @@ def view_teams():
                 p.year as leader_year,
                 p.department as leader_department,
                 p.gender as leader_gender,
+                p.phone_number as leader_phone,  -- Added leader phone
                 p.participation_type,
                 p.group_size,
                 p.competition,
@@ -223,7 +225,8 @@ def view_teams():
                 gm.name as member_name,
                 gm.year as member_year,
                 gm.department as member_department,
-                gm.gender as member_gender
+                gm.gender as member_gender,
+                gm.phone_number as member_phone  -- Added member phone
             FROM participants p
             LEFT JOIN group_members gm ON p.id = gm.participant_id
             ORDER BY p.registration_date DESC, p.id, gm.id
@@ -243,7 +246,8 @@ def view_teams():
                         'name': row['leader_name'],
                         'year': row['leader_year'],
                         'department': row['leader_department'],
-                        'gender': row['leader_gender']
+                        'gender': row['leader_gender'],
+                        'phone_number': row['leader_phone']  # Added phone
                     },
                     'participation_type': row['participation_type'],
                     'group_size': row['group_size'],
@@ -259,7 +263,8 @@ def view_teams():
                     'name': row['member_name'],
                     'year': row['member_year'],
                     'department': row['member_department'],
-                    'gender': row['member_gender']
+                    'gender': row['member_gender'],
+                    'phone_number': row['member_phone']  # Added phone
                 })
         
         return render_template('view_teams.html', teams=teams)
