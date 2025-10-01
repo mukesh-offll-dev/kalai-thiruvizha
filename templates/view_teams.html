@@ -238,10 +238,15 @@
                                     <span class="detail-value">{{ team.leader.gender }}</span>
                                 </div>
                                 <div class="detail-item">
+                                    <span class="detail-label">Phone:</span>
+                                    <span class="detail-value">{{ team.leader.phone_number }}</span>  <!-- Added -->
+                                </div>
+                                <div class="detail-item">
                                     <span class="detail-label">Role:</span>
                                     <span class="detail-value" style="color: #007bff; font-weight: bold;">Team Leader</span>
                                 </div>
                             </div>
+
                         </div>
                         
                         <!-- Group Members -->
@@ -266,10 +271,15 @@
                                         <span class="detail-value">{{ member.gender }}</span>
                                     </div>
                                     <div class="detail-item">
+                                        <span class="detail-label">Phone:</span>
+                                        <span class="detail-value">{{ member.phone_number }}</span>  <!-- Added -->
+                                    </div>
+                                    <div class="detail-item">
                                         <span class="detail-label">Role:</span>
                                         <span class="detail-value">Team Member</span>
                                     </div>
                                 </div>
+
                             </div>
                             {% endfor %}
                         {% endif %}
